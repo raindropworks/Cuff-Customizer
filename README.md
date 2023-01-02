@@ -14,9 +14,11 @@ Some or most of these may not ultimately be implemented. I'm a beginner in OpenS
 
 Original .scad file(s) is being saved here for archive purposes. Thingiverse has been more difficult for me to access of late, I'd rather such a resource not be lost.
 
-Other included resources:
+Other included resources (with pertinent licenses):
+- bezier.scad (Public domain code)
+- write.scad (and associated resources) originally from https://www.thingiverse.com/thing:16193 (CC BY 4.0 license)
 
-
+- Alternative pin designer: project I already finished and published at https://www.printables.com/model/355538-new-pins-for-cuff-customizer - makes round and locking pins based on the legacy script
 This work is licensed under a
 [Creative Commons Attribution-ShareAlike 4.0 International License][cc-by-sa].
 
