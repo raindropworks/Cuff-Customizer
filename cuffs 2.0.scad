@@ -35,6 +35,9 @@ Front_inscription_1 = "My";
 Front_inscription_2 = "Pet";
 // font depth can be adjusted, if embossing a smaller number is best. If you are engraving try out 25 to cut the letters out entierly for an interesting effect
 Front_font_depth = 3; // [0.5,1,2,3,5,8,25:25 - Cutout]
+//Text (or accent) height should be less than the top surface width. Currently Selected:
+Front_font_height = 15; // [7:30]
+Front_font_bold = 0.5; // [0,0.5,1,1.5,2,2.5,3:3]
 
 /* [Back Text] */
 //Back text engraved or embossed on the cuff
@@ -45,6 +48,9 @@ Back_font = "write/knewave.dxf"; //["write/Letters.dxf":Basic,"write/orbitron.dx
 Back_inscription = "Rules";
 // font depth can be adjusted, if embossing a smaller number is best. If you are engraving try out 25 to cut the letters out entierly for an interesting effect
 Back_depth = 3; // [0.5,1,2,3,5,8,25:25 - Cutout]
+//Text (or accent) height should be less than the top surface width. Currently Selected:
+Back_font_height = 15; // [7:30]
+Back_font_bold = 0.5; // [0,0.5,1,1.5,2,2.5,3:3]
 
 /* [Attachment Points] */
 //Would you like a leash connection on the front of the collar?
