@@ -72,19 +72,27 @@ Attachment_Hole_Size = 7; // [5:Small,7:Medium,10:Large]
 
 //Convert customizer to usable variables
 $fn=Render_complexity;
+f_text_font = Front_font;
+f_text_type = Front_Text_Style;
+f_text_depth = Front_font_depth;
+f_text_height = Front_font_height;
+f_text_bold = Front_font_bold;
 f_text_1 = Front_inscription_1;
 f_text_2 = Front_inscription_2;
+b_text_font = Back_font;
+b_text_type = Back_Text_Style;
+b_text_depth = Back_depth;
+b_text_height = Back_font_height;
+b_text_bold = Back_font_bold;
 b_text = Back_inscription;
-f_text_type = Front_Text_Type;
-b_text_type = Back_Text_Type;
 cuff_inside_d = Cuff_Size;
 cuff_wall = Cuff_Thick;
 cuff_width = Cuff_Width;
-cuff_outside_d = cuff_inside_d+cuff_thick;
-cuff_middle_d = (cuff_outisde_d+cuff_inside_d)/2;
+cuff_outside_d = cuff_inside_d+cuff_wall;
+cuff_middle_d = (cuff_outside_d+cuff_inside_d)/2;
 cuff_hole_d = cuff_wall/2;
 cuff_edge_radius = cuff_wall/3;
-hinge_play = .75*1l;
+hinge_play = .75*1;
 hinge_hole_d = cuff_wall/2;
 fudge = 0.05*1; //used to prevent 0 thickness issues
 hinge_offset = cuff_wall/2+hinge_play;
@@ -92,7 +100,7 @@ attachment_hole_d = Attachment_Hole_Size;
 attachment_z = Attachment_Style;
 attachment_count = Attachment_Bracket;
 
-//build_on_build_plate(); //Leave commented until the rest of the script is ready for testing
+build_on_build_plate(); //Leave commented until the rest of the script is ready for testing
 
 module build_on_build_plate() {
     // put the cuff together
@@ -208,7 +216,7 @@ module hinge (side =1) {
 	} else {
 
 		translate([0, 0, 0])
-			rounded_cyliner (rad=cuff_wall/2,corner_radius=cuff_edge_radius,height=cuff_width/3);
+			rounded_cylinder (rad=cuff_wall/2,corner_radius=cuff_edge_radius,height=cuff_width/3);
 
 		translate([0, length_of_filler/2-cuff_edge_radius, 0])
 			rounded_cube ([cuff_wall,length_of_filler,cuff_width/3],cuff_edge_radius);
@@ -227,36 +235,72 @@ module hinge_hole (side = 1) { //drills holes through both hinge connections
 }
 
 module full_round_with_text() { //makes basic cuff shape for half, then applies text, sends back to main builder
-	difference() {
+    
+    //TODO: Currently this section is ignoring the emboss/engrave setting for the back text as well as calculations and engraving/embossing for second line of front text (thus ignoring that option as well. Noted on master TODO list
+	difference() { //engraving cuff
 		full_round_cuff();
-
-		// engraving
-		if (emboss_or_engrave==1) {
-			translate ([0,0,font_height/8]) {
-				writecylinder(inscription1,[0,0,0],cuff_outside_d/2,0,rotate=0,font=font,
-					t=font_depth*2,h=font_height,bold=font_bold,center=true);
-
-				rotate (a=180,v=[0,0,1])
-					writecylinder(inscription2,[0,0,0],cuff_outside_d/2,0,rotate=0,font=font,
-						t=font_depth*2,h=font_height,bold=font_bold,center=true);
+		if (f_text_type==1) {
+			translate ([0,0,f_text_height/8]) {
+				writecylinder(f_text_1,[0,0,0],cuff_outside_d/2,0,rotate=0,font=f_text_font,
+                t=f_text_depth*2,h=f_text_height,bold=f_text_bold,center=true);
+				rotate (a=180,v=[0,0,1]) //this section will be moved later
+					writecylinder(b_text_1,[0,0,0],cuff_outside_d/2,0,rotate=0,font=b_text_font,
+                t=b_text_depth*2,h=b_text_height,bold=b_text_bold,center=true);
 			}
 		}
 	}
 
-
-//embossing
-		*if (emboss_or_engrave==0) {
-			translate ([0,0,font_height/8]) {
-				writecylinder(inscription1,[0,0,0],cuff_outside_d/2,0,rotate=0,font=font,
-					t=font_depth,h=font_height,bold=font_bold,center=true);
-
-				rotate (a=180,v=[0,0,1])
-					writecylinder(inscription2,[0,0,0],cuff_outside_d/2,0,rotate=0,font=font,
-						t=font_depth,h=font_height,bold=font_bold,center=true);
+		*if (f_text_type==0) { //embossing cuff
+			translate ([0,0,f_text_height/8]) {
+				writecylinder(f_text_1,[0,0,0],cuff_outside_d/2,0,rotate=0,font=f_text_font,
+                t=f_text_depth,h=f_text_height,bold=f_text_bold,center=true);
+				rotate (a=180,v=[0,0,1]) //this section will be moved later
+					writecylinder(b_text,[0,0,0],cuff_outside_d/2,0,rotate=0,font=b_text_font,
+                t=b_font_depth,h=b_text_height,bold=b_text_bold,center=true);
 			}
 		}
+}
 
+module full_round_cuff () {
 
+	cuff_radius_x_offset = cuff_wall/2-cuff_edge_radius;
+	cuff_radius_y_offset = cuff_width/2-cuff_edge_radius;
+
+		rotate_extrude(convexity = 10)
+			translate([cuff_middle_d/2+cuff_radius_x_offset, cuff_radius_y_offset, 0])
+				circle(r = cuff_edge_radius);
+		rotate_extrude(convexity = 10)
+			translate([cuff_middle_d/2-cuff_radius_x_offset, cuff_radius_y_offset, 0])
+				circle(r = cuff_edge_radius);
+
+		rotate_extrude(convexity = 10)
+			translate([cuff_middle_d/2+cuff_radius_x_offset, -cuff_radius_y_offset, 0])
+				circle(r = cuff_edge_radius);
+
+		rotate_extrude(convexity = 10)
+			translate([cuff_middle_d/2-cuff_radius_x_offset, -cuff_radius_y_offset, 0])
+				circle(r = cuff_edge_radius);
+		rotate_extrude(convexity = 10)
+			translate([cuff_middle_d/2, 0, 0])
+				square ([cuff_wall,cuff_width-cuff_edge_radius*2],center = true);				
+
+		rotate_extrude(convexity = 10)
+			translate([cuff_middle_d/2, 0, 0])
+				square ([cuff_wall-cuff_edge_radius*2,cuff_width],center = true);	
+}
+
+module mask_half (side=1) {
+	if (side == 1) {
+		translate([0, (cuff_outside_d/2+fudge+cuff_edge_radius*2)/2 - cuff_edge_radius, 0])
+			cube([cuff_outside_d+fudge,
+					cuff_outside_d/2+fudge+cuff_edge_radius*2,
+					cuff_width+fudge], center=true);
+	} else {
+		translate([0, -((cuff_outside_d/2+fudge+cuff_edge_radius*2)/2 - cuff_edge_radius), 0])
+			cube([cuff_outside_d+fudge,
+					cuff_outside_d/2+fudge+cuff_edge_radius*2,
+					cuff_width+fudge], center=true);
+	}
 }
 
 // Unique geometry modules
