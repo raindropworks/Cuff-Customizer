@@ -1,0 +1,14 @@
+//Which parts would you like to print.
+Print_Parts = 1; // [1:Everything,2:Cuffs only,5:Lock Pin only,6:Key only]
+emboss_or_engrave 0 = emboss, 1 = engrave (now named as f_text_type and b_text_type)
+
+go back to line 394 to add attachment_point module
+new doc make_cuff_side_1 module: edit the 'writecylinder' script to allow 1 or 2 line text
+new doc copy and adapt attachment_point module to create leash ring, place in make_cuff_side_1 module
+when migrating full_round_with_text module, make sure to implement engrave/emboss checking on each side. Will probably double module length
+correct any misspellings of 'rounded_cyliner' to 'rounded_cylinder'
+
+needed modules:
+full_round_with_text 786
+full_round_cuff 753
+mask_half 736
