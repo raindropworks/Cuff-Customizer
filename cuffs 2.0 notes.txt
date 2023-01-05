@@ -1,14 +1,42 @@
-//Which parts would you like to print.
+parametric variables:
+$fn=Render_complexity;
+f_text_font = Front_font;
+f_text_type = Front_Text_Type;
+f_text_depth = Front_font_depth;
+f_text_height = Front_font_height;
+f_text_bold = Front_font_bold;
+f_text_1 = Front_inscription_1;
+f_text_2 = Front_inscription_2;
+b_text_font = Back_font;
+b_text_type = Back_Text_Type;
+b_text_depth = Back_depth;
+b_text_height = Back_font_height;
+b_text_bold = Back_font_bold;
+b_text = Back_inscription;
+cuff_inside_d = Cuff_Size;
+cuff_wall = Cuff_Thick;
+cuff_width = Cuff_Width;
+cuff_outside_d = cuff_inside_d+cuff_thick;
+cuff_middle_d = (cuff_outisde_d+cuff_inside_d)/2;
+cuff_hole_d = cuff_wall/2;
+cuff_edge_radius = cuff_wall/3;
+hinge_play = .75*1l;
+hinge_hole_d = cuff_wall/2;
+fudge = 0.05*1; //used to prevent 0 thickness issues
+hinge_offset = cuff_wall/2+hinge_play;
+attachment_hole_d = Attachment_Hole_Size;
+attachment_z = Attachment_Style;
+attachment_count = Attachment_Bracket;
+
+
+
 Print_Parts = 1; // [1:Everything,2:Cuffs only,5:Lock Pin only,6:Key only]
 emboss_or_engrave 0 = emboss, 1 = engrave (now named as f_text_type and b_text_type)
 
-go back to line 394 to add attachment_point module
-new doc make_cuff_side_1 module: edit the 'writecylinder' script to allow 1 or 2 line text
-new doc copy and adapt attachment_point module to create leash ring, place in make_cuff_side_1 module
-when migrating full_round_with_text module, make sure to implement engrave/emboss checking on each side. Will probably double module length
-correct any misspellings of 'rounded_cyliner' to 'rounded_cylinder'
+- go back to line 394 to add attachment_point module
+- new doc make_cuff_side_1 module: edit the 'writecylinder' script to allow 1 or 2 line text
+- new doc copy and adapt attachment_point module to create leash ring, place in make_cuff_side_1 module
+- in full_round_with_text module, make sure to implement engrave/emboss checking on each side. Will probably double module length
+- while fixing the full_round_with_text module, see if an error can be pushed to console if font height goes past cuff width for a particular side (particularly important for 2-line front cuff)
 
 needed modules:
-full_round_with_text 786
-full_round_cuff 753
-mask_half 736
